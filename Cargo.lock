@@ -138,7 +138,7 @@ dependencies = [
 
 [[package]]
 name = "dprint-plugin-alejandra"
-version = "0.0.1"
+version = "0.1.0"
 dependencies = [
  "alejandra",
  "dprint-core",
