@@ -1,0 +1,60 @@
+~~ useTabs: true ~~
+== should indent with tabs ==
+{
+  foo =
+      bar:
+          baz:
+            fnbody;
+}
+
+[expect]
+{
+	foo = bar: baz:
+		fnbody;
+}
+
+== should indent lists with tabs ==
+[
+      # over indented
+  1
+ # under indented
+  2
+# no indentation
+    [1 2]
+    [
+    1 2 3
+    ]
+]
+
+[expect]
+[
+	# over indented
+	1
+	# under indented
+	2
+	# no indentation
+	[1 2]
+	[
+		1
+		2
+		3
+	]
+]
+
+== should not indent multi-line strings with tabs ==
+[
+  ''
+    foo
+
+    bar
+  ''
+]
+
+[expect]
+[
+	''
+    foo
+
+    bar
+  ''
+]

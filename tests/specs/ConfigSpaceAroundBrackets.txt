@@ -1,0 +1,59 @@
+~~ spaceAroundBrackets: true ~~
+== should put spaces around braces ==
+[
+  {}
+  {a = 1;}
+  {  a = 1;  }
+  {a = 1; b = 2;}
+  {
+    a = 1;
+    b = 2;
+  }
+  rec {x = 1;}
+  rec {  x = 1;  }
+]
+
+[expect]
+[
+  {}
+  { a = 1; }
+  { a = 1; }
+  {
+    a = 1;
+    b = 2;
+  }
+  {
+    a = 1;
+    b = 2;
+  }
+  rec { x = 1; }
+  rec { x = 1; }
+]
+
+== should put spaces around brackets ==
+[
+  []
+  [1]
+  [1 2]
+  [  1  2  ]
+  [
+    1
+    2
+  ]
+  [a b c]
+  [  a   b   c  ]
+]
+
+[expect]
+[
+  []
+  [ 1 ]
+  [ 1 2 ]
+  [ 1 2 ]
+  [
+    1
+    2
+  ]
+  [ a b c ]
+  [ a b c ]
+]

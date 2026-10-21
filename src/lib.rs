@@ -1,0 +1,9 @@
+pub mod configuration;
+mod format_text;
+
+pub use format_text::FormatError;
+pub use format_text::format_text;
+
+#[cfg(feature = "wasm")]
+#[cfg(all(target_arch = "wasm32", target_os = "unknown"))]
+mod wasm_plugin;

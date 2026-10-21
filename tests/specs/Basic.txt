@@ -1,0 +1,102 @@
+== should format common idioms ==
+[
+    { meta = with lib; { a=1; b=2; c=3; };}
+
+    { meta = with lib;
+    # comment
+    { a=1; b=2; c=3; };}
+]
+
+[expect]
+[
+  {
+    meta = with lib; {
+      a = 1;
+      b = 2;
+      c = 3;
+    };
+  }
+
+  {
+    meta = with lib;
+    # comment
+      {
+        a = 1;
+        b = 2;
+        c = 3;
+      };
+  }
+]
+
+== should format dynamic attributes ==
+a.${/*b*/c.${/*d*/e.${f}}/*g*/}
+
+[expect]
+a.${
+  /*
+  b
+  */
+  c.${
+    /*
+    d
+    */
+    e.${f}
+  }
+  /*
+  g
+  */
+}
+
+== should keep comments in inherit ==
+{
+  inherit # eeby deeby
+    a
+    # b
+    c
+    ;
+}
+
+[expect]
+{
+  inherit # eeby deeby
+    a
+    # b
+    c
+    ;
+}
+
+== should format pipe operators ==
+[
+  (1 |> builtins.add 2 |> builtins.mul 3)
+  (builtins.add 1 <| builtins.mul 2 <| 3)
+  (1 |> builtins.add 2 |>
+  builtins.mul 3)
+]
+
+[expect]
+[
+  (1 |> builtins.add 2 |> builtins.mul 3)
+  (builtins.add 1 <| builtins.mul 2 <| 3)
+  (1
+    |> builtins.add 2
+    |> builtins.mul 3)
+]
+
+== should format string interpolation ==
+"${/*a*/"${/*b*/"${c}"}"/*d*/}"
+
+[expect]
+"${
+  /*
+  a
+  */
+  "${
+    /*
+    b
+    */
+    "${c}"
+  }"
+  /*
+  d
+  */
+}"
