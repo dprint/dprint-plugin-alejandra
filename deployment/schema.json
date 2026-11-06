@@ -2,17 +2,52 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "https://plugins.dprint.dev/dprint/dprint-plugin-alejandra/0.0.0/schema.json",
   "type": "object",
+  "x-playground": {
+    "input": [
+      "{ lib, stdenv, fetchFromGitHub, cmake, pkg-config, openssl, withTests ? false }:",
+      "let",
+      "    version=\"1.4.2\";",
+      "  flags = [ \"-DUSE_SYSTEM_SSL=ON\" ] ++ lib.optional (!withTests) \"-DENABLE_TESTS=OFF\";",
+      "in",
+      "stdenv.mkDerivation {",
+      "  pname = \"weather-report\"; inherit version;",
+      "  src = fetchFromGitHub { owner = \"example\"; repo = \"weather-report\"; rev = \"v${version}\"; hash = lib.fakeHash; };",
+      "  nativeBuildInputs = [cmake pkg-config];",
+      "  buildInputs = [ openssl ];",
+      "  cmakeFlags = flags;",
+      "  doCheck = withTests;",
+      "  postInstall = ''",
+      "      install -Dm644 ../share/weather.conf $out/etc/weather.conf",
+      "  '';",
+      "  meta = { description = \"Prints a short weather report\"; license = lib.licenses.mit; platforms = if stdenv.isDarwin then lib.platforms.darwin else lib.platforms.linux; };",
+      "}"
+    ]
+  },
   "properties": {
     "useTabs": {
       "description": "Whether to indent with tabs instead of spaces. Multi-line strings are still indented with spaces, since Nix keeps leading tabs in them.",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "{",
+          "  services = { nginx = { enable = true; ports = [80 443]; }; };",
+          "}"
+        ]
+      }
     },
     "indentWidth": {
       "description": "The number of spaces for an indent when not using tabs. Alejandra only supports 2 and 4.",
       "default": 2,
-      "type": "number",
-      "enum": [2, 4]
+      "type": "integer",
+      "enum": [2, 4],
+      "x-example": {
+        "input": [
+          "{",
+          "  services = { nginx = { enable = true; ports = [80 443]; }; };",
+          "}"
+        ]
+      }
     },
     "newLineKind": {
       "description": "The kind of newline to use.",
@@ -32,7 +67,15 @@
     "spaceAroundBrackets": {
       "description": "Whether to put spaces inside the brackets of single-line lists and attribute sets (ex. `{ a = 1; }` and `[ 1 2 ]`). Experimental in Alejandra.",
       "default": false,
-      "type": "boolean"
+      "type": "boolean",
+      "x-example": {
+        "input": [
+          "{",
+          "  networking.firewall.allowedTCPPorts = [80 443];",
+          "  environment.systemPackages = with pkgs; [git curl];",
+          "}"
+        ]
+      }
     }
   }
 }
