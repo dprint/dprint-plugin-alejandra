@@ -135,6 +135,7 @@ function getAlejandraCargoTomlTag(text: string) {
 async function getLatestAlejandraVersion() {
   const data = await $.request("https://api.github.com/repos/kamadorueda/alejandra/releases/latest")
     .header("User-Agent", "dprint-plugin-alejandra update script")
+    .header(getGitHubHeaders())
     .json<{ tag_name?: string }>();
   const version = data.tag_name;
   if (version == null || semver.tryParse(version) == null) {
@@ -142,4 +143,11 @@ async function getLatestAlejandraVersion() {
   }
   $.logLight("Latest Alejandra release:", version);
   return version;
+}
+
+// authenticates the requests to GitHub when there's a token, since
+// unauthenticated ones get rate limited on the runners' shared IPs
+function getGitHubHeaders(): Record<string, string> {
+  const token = Deno.env.get("GITHUB_TOKEN");
+  return token ? { authorization: `Bearer ${token}` } : {};
 }
